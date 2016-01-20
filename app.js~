@@ -1,0 +1,19 @@
+var fs = require("fs");
+var csv = require("fast-csv");
+var stream = fs.createReadStream("Images.csv");
+//var csvStream = csv.createWriteStream({headers:true}),
+	writableStream = fs.createWriteStream("output.csv", {'flags':'a'});
+var csvWrite = csv.createWriteStream({headers: true}), 
+
+csvSTream = csv()
+	.on("data", function(data){
+
+    	writableStream = fs.createWriteStream("output.csv");
+	    writableStream.on("finish", function(){	console.log("DONE!");	});
+        csvWrite.pipe(writableStream);
+        csvWrite.write({a: data[0], b: data[1] +'\n'});
+        csvWrite.end();
+    })
+    .on("end", function(){	console.log("done");	}); 
+
+stream.pipe(csvStream);
